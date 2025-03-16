@@ -2,7 +2,7 @@ import kotlin.system.exitProcess
 
 fun main() {
     val library = Library()
-    val initlibrary =  initLibrary(library)
+    val initlibrary =  InitLibrary(library)
     val menus = Menus(library)
 
     initlibrary.addBook("Гарри Поттер и узник Азкабана", 620, "Джоан Роулинг", true)
@@ -15,7 +15,7 @@ fun main() {
     initlibrary.addDisk("DVD", "Контер страйк 1.6", true)
     initlibrary.addDisk("DVD", "Сборник фильмов Гарри Поттер", true)
 
-    menus.main_menu()
+    menus.mainMenu()
 }
 
 class LibraryObjects {
@@ -65,7 +65,7 @@ class Library {
             when (typeId) {
                 1 -> {  //  Книга
                     if ((item as LibraryObjects.Book).Id == objectId) {
-                        if ((item as LibraryObjects.Book).Acess) {
+                        if (item.Acess) {
                             foundItem = item
                             break
                         } else {
@@ -76,7 +76,7 @@ class Library {
                 }
                 3 -> {// диск
                     if ((item as LibraryObjects.Disk).Id == objectId) {
-                        if ((item as LibraryObjects.Disk).Acess) {
+                        if (item.Acess) {
                             foundItem = item
                             break
                         } else {
@@ -121,7 +121,7 @@ class Library {
             when (typeId) {
                 1 -> {  //  Книга
                     if ((item as LibraryObjects.Book).Id == objectId) {
-                        if ((item as LibraryObjects.Book).Acess) {
+                        if (item .Acess) {
                             foundItem = item
                             break
                         } else {
@@ -132,7 +132,7 @@ class Library {
                 }
                 2 -> {// диск
                     if ((item as LibraryObjects.Journal).Id == objectId) {
-                        if ((item as LibraryObjects.Journal).Acess) {
+                        if (item.Acess) {
                             foundItem = item
                             break
                         } else {
@@ -174,7 +174,7 @@ class Library {
             when (typeId) {
                 1 -> {  //  Книга
                     if ((item as LibraryObjects.Book).Id == objectId) {
-                        if (!(item as LibraryObjects.Book).Acess) {
+                        if (!item.Acess) {
                             foundItem = item
                             break
                         } else {
@@ -185,7 +185,7 @@ class Library {
                 }
                 2 -> {  //  Газета
                     if ((item as LibraryObjects.Journal).Id == objectId) {
-                        if (!(item as LibraryObjects.Journal).Acess) {
+                        if (!item.Acess) {
                             foundItem = item
                             break
                         } else {
@@ -196,7 +196,7 @@ class Library {
                 }
                 3 -> {  //  Диск
                     if ((item as LibraryObjects.Disk).Id == objectId) {
-                        if (!(item as LibraryObjects.Disk).Acess) {
+                        if (!item.Acess) {
                             foundItem = item
                             break
                         } else {
@@ -230,7 +230,7 @@ class Library {
     }
 }
 
-class initLibrary(private val library: Library) {
+class InitLibrary(private val library: Library) {
     val formatprint = FormatPrint(library)
 
     fun addBook(title: String, pages: Int, author: String, acess: Boolean) {
@@ -262,10 +262,10 @@ class initLibrary(private val library: Library) {
 }
 
 class Menus(private val library: Library) {
-    private val initLibrary = initLibrary(library)
+    private val initLibrary = InitLibrary(library)
     private val formatPrint = FormatPrint(library)
 
-    fun main_menu() {
+    fun mainMenu() {
         while (true) {
             println(
                 "1. Показать книги\n" +
@@ -278,15 +278,15 @@ class Menus(private val library: Library) {
             when (readlnOrNull()?.toIntOrNull()) {
                 1 -> {
                     initLibrary.showBook()
-                    second_menu(1)
+                    secondMenu(1)
                 }
                 2 -> {
                     initLibrary.showJournal()
-                    second_menu(2)
+                    secondMenu(2)
                 }
                 3 -> {
                     initLibrary.showDisk()
-                    second_menu(3)
+                    secondMenu(3)
                 }
                 4 -> {
                     println("Спасибо за использование!")
@@ -297,7 +297,7 @@ class Menus(private val library: Library) {
         }
     }
 
-    fun second_menu(typeId: Int) {
+    fun secondMenu(typeId: Int) {
         println("Введите Id обьекта с которым хотите работать!")
         val Object_ID = readlnOrNull()?.toIntOrNull()
         if (Object_ID == null){
@@ -317,7 +317,7 @@ class Menus(private val library: Library) {
                 2 -> library.readInLibrary(typeId, Object_ID)
                 3 -> formatPrint.printInfoLong(typeId, Object_ID)
                 4 -> library.returnFromHome(typeId, Object_ID)
-                5 -> main_menu()
+                5 -> mainMenu()
                 else ->  println("Неправильный выбор!")
             }
         }
@@ -388,7 +388,7 @@ class FormatPrint(private val library: Library) {
                 Книга: $Title ($Pages стр.) автора: $Author c Id: $Id доступна: $Acess
             """.trimIndent()
             is LibraryObjects.Journal  -> """
-                Выпуск: $Title газеты $Title с Id: $Id доступен: $Acess
+                Выпуск: $NumIssue газеты $Title с Id: $Id доступен: $Acess
             """.trimIndent()
             is LibraryObjects.Disk  -> """
                 $TypeDisk $Title доступен: $Acess 
