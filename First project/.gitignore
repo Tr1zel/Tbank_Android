@@ -4,8 +4,6 @@ src/
 !**/src/main/**/out/
 !**/src/test/**/out/
 .idea/
-../../.idea/
-Kotlin Projects.iml
 ### Kotlin ###
 .kotlin
 
