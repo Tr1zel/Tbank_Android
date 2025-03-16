@@ -36,7 +36,7 @@ class LibraryObjects {
         val Id: Int,
         val TypeDisk: String, // Тип диска (двд..)
         val Title: String, // Название
-        val Acess: Boolean // Доступность
+        var Acess: Boolean // Доступность
     )
 }
 
@@ -86,53 +86,144 @@ class Library {
                 return
             }
         }
-        println("Введите ID книги которую хотите взять домой:")
+        println("Введите ID обьекта который хотите взять домой:")
         val take_ID = readlnOrNull()?.toIntOrNull()
 
         if (take_ID == null) {
             println("Некоректный ID")
             return
         }
-
         var foundItem: Any? = null
-
         for (item in ListToTake) {
             when (typeId) {
                 1 -> {  //  Книга
                     if ((item as LibraryObjects.Book).Id == take_ID) {
-                        foundItem = item
-                        break
+                        if ((item as LibraryObjects.Book).Acess) {
+                            foundItem = item
+                            break
+                        } else {
+                            println("Книги с Id = $take_ID нет в наличии, вы не можете ее взять")
+                            return
+                            }
                     }
                 }
                 2 -> { // Газета
                     if ((item as LibraryObjects.Journal).Id == take_ID) {
-                        foundItem = item
-                        break
+                        if ((item as LibraryObjects.Journal).Acess) {
+                            foundItem = item
+                            break
+                        } else {
+                            println("Газеты с Id = $take_ID нет в наличии, вы не можете ее взять")
+                            return
+                        }
                     }
                 }
                 3 -> {// диск
                     if ((item as LibraryObjects.Disk).Id == take_ID) {
-                        foundItem = item
-                        break
+                        if ((item as LibraryObjects.Disk).Acess) {
+                            foundItem = item
+                            break
+                        } else {
+                            println("Диска с Id = $take_ID нет в наличии, вы не можете ее взять")
+                            return
+                        }
+                    }
+                }
+            }
+        }
+        if (foundItem != null) {
+            when (foundItem) {
+                is LibraryObjects.Book  ->  {
+                    ListBook[take_ID].Acess = ListBook[take_ID].Acess.not()
+                    println("Книга с Id = $take_ID взяли домой")}
+                is LibraryObjects.Journal  -> {
+                    ListJournal[take_ID].Acess = ListBook[take_ID].Acess.not()
+                    println("Газету с Id = $take_ID взяли домой")
+                }
+                is LibraryObjects.Disk  -> {
+                    ListDisk[take_ID].Acess = ListDisk[take_ID].Acess.not()
+                    println("Диск с Id = $take_ID взяли домой")
+                }
+            }
+        } else {
+            println("Обьект с ID $take_ID не найден в списке type_id = $typeId.")
+        }
+    }
+
+    fun returnFromHome(typeId: Int) {
+        val listToReturn = when (typeId) {
+            1 -> ListBook
+            2 -> ListJournal
+            3 -> ListDisk
+            else -> {
+                println("Неправильный ID")
+                return
+            }
+        }
+
+        println("Введите ID обьекта который хотите вернуть из дома:")
+        val return_Id = readlnOrNull()?.toIntOrNull()
+
+        if (return_Id  == null) {
+            println("Неверный Id")
+            return
+        }
+        var foundItem: Any? = null
+        for (item in listToReturn) {
+            when (typeId) {
+                1 -> {  //  Книга
+                    if ((item as LibraryObjects.Book).Id == return_Id) {
+                        if (!(item as LibraryObjects.Book).Acess) {
+                            foundItem = item
+                            break
+                        } else {
+                            println("Книга с Id = $return_Id в наличии, вы не можете ее вернуть")
+                            return
+                        }
+                    }
+                }
+                2 -> {  //  Газета
+                    if ((item as LibraryObjects.Journal).Id == return_Id) {
+                        if (!(item as LibraryObjects.Journal).Acess) {
+                            foundItem = item
+                            break
+                        } else {
+                            println("Газета с Id = $return_Id в наличии, вы не можете ее вернуть")
+                            return
+                        }
+                    }
+                }
+                3 -> {  //  Диск
+                    if ((item as LibraryObjects.Disk).Id == return_Id) {
+                        if (!(item as LibraryObjects.Disk).Acess) {
+                            foundItem = item
+                            break
+                        } else {
+                            println("Диск с Id = $return_Id в наличии, вы не можете ее вернуть")
+                            return
+                        }
                     }
                 }
             }
         }
 
         if (foundItem != null) {
-
             when (foundItem) {
-                is LibraryObjects.Book  ->  {
-                    ListBook[take_ID].Acess = ListBook[take_ID].Acess.not()
-                    println(foundItem.formatToStringShort())}
-                is LibraryObjects.Journal  -> {
-                    ListJournal[take_ID].Acess = ListBook[take_ID].Acess.not()
-                    println(foundItem.formatToStringShort())
+                is LibraryObjects.Book -> {
+                    ListBook[return_Id].Acess = ListBook[return_Id].Acess.not()
+                    println("Книга с Id = $return_Id успешно возвращена на базу")
                 }
-                is LibraryObjects.Disk  ->  println(foundItem.formatToStringShort())
+                is LibraryObjects.Journal -> {
+                    ListJournal[return_Id].Acess = ListJournal[return_Id].Acess.not()
+                    println("Газета с Id = $return_Id успешно возвращена на базу")
+                }
+                is LibraryObjects.Disk -> {
+                    ListDisk[return_Id].Acess = ListDisk[return_Id].Acess.not()
+                    println("Диск с Id = $return_Id успешно возвращен на базу")
+                }
             }
         } else {
-            println("Обьект с ID $take_ID не найден в списке type_id = $typeId.")
+            println("Обьекта с данным Id $return_Id не найдено")
         }
 
     }
@@ -223,7 +314,7 @@ class Menus(private val library: Library) {
                 1 -> library.takeHome(typeId)
                 2 -> TODO("Читать в зале")
                 3 -> TODO("Показать доп информацию")
-                4 -> TODO("Вернуть")
+                4 -> library.returnFromHome(typeId)
                 5 -> main_menu()
                 else ->  println("Неправильный выбор!")
             }
