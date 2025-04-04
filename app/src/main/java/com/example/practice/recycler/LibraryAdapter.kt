@@ -2,24 +2,23 @@ package com.example.practice
 import Library
 import LibraryObject
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.practice.databinding.LibraryItemBinding
 import androidx.recyclerview.widget.RecyclerView
 
 class LibraryAdapter(
     private val items: MutableList<LibraryObject>,
-     val onItemClick: (LibraryObject) -> Unit
-):
+    private val onItemClick: (LibraryObject) -> Unit ):
     RecyclerView.Adapter<LibraryAdapter.LibraryViewHolder>() {
         val library = Library()
 
-    inner class LibraryViewHolder(binding: View): RecyclerView.ViewHolder(binding) {
+    inner class LibraryViewHolder(binding: LibraryItemBinding): RecyclerView.ViewHolder(binding.root) {
 
-        private val title: TextView = binding.findViewById(R.id.title)
-        private val idText: TextView = binding.findViewById(R.id.id)
-        private val image: ImageView = binding.findViewById(R.id.avatar)
+        private val title: TextView = binding.title
+        private val idText: TextView = binding.id
+        private val image: ImageView = binding.ivAvatar
 
         fun bind(item: LibraryObject) {
             title.text = item.title
@@ -42,8 +41,7 @@ class LibraryAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LibraryViewHolder {
-//        val binding = LibraryItemBinding.inflate(LayoutInflater.from(parent.context))
-        val binding = LayoutInflater.from(parent.context).inflate(R.layout.library_item, parent,false)
+        val binding = LibraryItemBinding.inflate(LayoutInflater.from(parent.context), parent,false)
         return LibraryViewHolder(binding)
     }
 
