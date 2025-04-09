@@ -1,20 +1,47 @@
 package com.example.practice.library
 
-
 import Book
 import Disk
 import Journal
+import android.app.Activity
+import android.content.Intent
+import android.icu.text.CaseMap.Title
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.practice.databinding.ActivityMainBinding
 import com.example.practice.LibraryAdapter
+import com.example.practice.R
+import com.example.practice.SecondActivity
+import com.example.practice.vh.LibraryViewHolder
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var libraryadapter: LibraryAdapter
+
+//    val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//        if (result.resultCode == Activity.RESULT_OK) {
+//            val data: Intent? = result.data
+//            val title = data?.getStringExtra(SecondActivity.TITLE_TEXT)
+//            val author = data?.getStringExtra(SecondActivity.AUTHOR_TEXT)
+//            val position = data?.getIntExtra(SecondActivity.POSITION, -1)
+//
+//            if (title != null && author != null && position != -1) {
+//                if (position != null) {
+//                    items[position].title = title
+//                }
+//                if (position != null) {
+//                    libraryadapter.notifyItemChanged(position)
+//                }
+//            }
+//        }
+//    }
+
 
     private val items = mutableListOf(
         Book(id = 11,"Гарри Поттер и узник Азкабана",620,"Джоан Роулинг"),
@@ -37,11 +64,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         libraryadapter = LibraryAdapter(items) { item ->
-            item.access = !item.access
-            Toast.makeText(this, "Элемент с Id: ${item.id}", Toast.LENGTH_SHORT).show()
-            libraryadapter.notifyDataSetChanged()
+            val intent = SecondActivity.createIntent(this)
+            intent.putExtra("info", item.showInfo())
+            intent.putExtra("id", item.id)
+            startActivity(intent)
         }
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
         binding.recyclerview.adapter = libraryadapter
+
+
     }
+
+//    companion object {
+//        const val TITLE_TEXT = "titleText"
+//        const val AUTHOR_TEXT = "authorText"
+//        const val POSITION = "position"
+//    }
 }
