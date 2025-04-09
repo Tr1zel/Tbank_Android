@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.example.practice.vh.LibraryViewHolder
 
 class SecondActivity: AppCompatActivity() {
 
@@ -20,7 +21,7 @@ class SecondActivity: AppCompatActivity() {
 
         val authorview = findViewById<TextView>(R.id.item_title)
         val savebutton = findViewById<Button>(R.id.BookSaveButton)
-
+//        val resourceId =
         val info = intent.getStringExtra("info")
         position = intent.getIntExtra(POSITION, -1)
 

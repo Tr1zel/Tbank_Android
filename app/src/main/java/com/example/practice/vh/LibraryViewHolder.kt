@@ -23,15 +23,25 @@ class LibraryViewHolder(binding: LibraryItemBinding): RecyclerView.ViewHolder(bi
 
     fun bind(item: LibraryObject, onItemClick: (LibraryObject) -> Unit) {
         title.text = item.title
-
-        val resourceId = itemView.context.resources.getIdentifier(
-            "book", "drawable", itemView.context.packageName
-        )
-        if (resourceId != 0) {
-            image.setImageResource(resourceId)
-        } else {
-            image.setImageResource(R.drawable.ic_launcher_foreground) // или запасная картинка
+        var resourceId = itemView.context.resources.getIdentifier(
+            "ic_launcher_foreground", "drawable", itemView.context.packageName)
+        when (item) {
+            is Book -> {
+                resourceId = itemView.context.resources.getIdentifier(
+                    "book", "drawable", itemView.context.packageName)
+            }
+            is Journal-> {
+                resourceId = itemView.context.resources.getIdentifier(
+                    "journal", "drawable", itemView.context.packageName)
+            }
+            is Disk -> {
+                resourceId = itemView.context.resources.getIdentifier(
+                    "disk", "drawable", itemView.context.packageName)
+            }
+            else  -> {}
         }
+        image.setImageResource(resourceId)
+
         itemView.setOnClickListener {
             onItemClick(item)
 
