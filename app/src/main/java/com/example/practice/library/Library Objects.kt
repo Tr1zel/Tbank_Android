@@ -29,7 +29,9 @@ class Book(
     }
 
     override fun showInfo(): String {
-        return "книга: $title (${pages} стр.) автора: ${author}author с id: $id доступна: ${if (access) "Да" else "Нет"}"
+        return "книга: $title (${pages} стр.) \n" +
+                "автора: ${author} с id: $id \n" +
+                "доступна: ${if (access) "Да" else "Нет"}"
     }
 }
 
@@ -53,7 +55,9 @@ class Journal(
     }
 
     override fun showInfo(): String {
-        return "выпуск: $numIssue месяц: $numMonthIssue газеты $title с id: $id доступен: ${if (access) "Да" else "Нет"}"
+        return "выпуск: $numIssue \n" +
+                "месяц: $numMonthIssue газеты $title с id: $id \n" +
+                "доступен: ${if (access) "Да" else "Нет"}"
     }
 }
 
@@ -75,7 +79,8 @@ class Disk(
     }
 
     override fun showInfo(): String {
-        return "$typeDisk $title доступен: ${if (access) "Да" else "Нет"}"
+        return "$typeDisk $title \n" +
+                "доступен: ${if (access) "Да" else "Нет"}"
     }
 }
 

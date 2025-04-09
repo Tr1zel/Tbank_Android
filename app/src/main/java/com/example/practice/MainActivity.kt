@@ -23,30 +23,24 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var libraryadapter: LibraryAdapter
-    private lateinit var recyclerView: RecyclerView
 
-    val startForResult =registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            // Обработка результата из SecondActivity
-            val data: Intent? = result.data
-            // Извлеките данные из Intent (если есть)
-            val title = data?.getStringExtra(SecondActivity.TITLE_TEXT)
-            val author = data?.getStringExtra(SecondActivity.AUTHOR_TEXT)
-            val position = data?.getIntExtra(SecondActivity.POSITION, -1)
-
-            // Используйте полученные данные
-            if (title != null && author != null && position != -1) {
-                // Обновите элемент в списке (если это необходимо)
-                if (position != null) {
-                    items[position].title = title
-                }
-                //items[position].author = author //Добавьте если есть поле author
-                if (position != null) {
-                    libraryadapter.notifyItemChanged(position)
-                } // Обновите RecyclerView
-            }
-        }
-    }
+//    val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//        if (result.resultCode == Activity.RESULT_OK) {
+//            val data: Intent? = result.data
+//            val title = data?.getStringExtra(SecondActivity.TITLE_TEXT)
+//            val author = data?.getStringExtra(SecondActivity.AUTHOR_TEXT)
+//            val position = data?.getIntExtra(SecondActivity.POSITION, -1)
+//
+//            if (title != null && author != null && position != -1) {
+//                if (position != null) {
+//                    items[position].title = title
+//                }
+//                if (position != null) {
+//                    libraryadapter.notifyItemChanged(position)
+//                }
+//            }
+//        }
+//    }
 
 
     private val items = mutableListOf(
@@ -70,10 +64,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         libraryadapter = LibraryAdapter(items) { item ->
-//            startForResult.launch(SecondActivity.createIntent(this).apply {
-//                putExtra("info", item.showInfo())
-//                putExtra(POSITION, items.indexOf(item)) // Передаем позицию
-//            })
             val intent = SecondActivity.createIntent(this)
             intent.putExtra("info", item.showInfo())
             intent.putExtra("id", item.id)
@@ -85,9 +75,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    companion object {
-        const val TITLE_TEXT = "titleText"
-        const val AUTHOR_TEXT = "authorText"
-        const val POSITION = "position"
-    }
+//    companion object {
+//        const val TITLE_TEXT = "titleText"
+//        const val AUTHOR_TEXT = "authorText"
+//        const val POSITION = "position"
+//    }
 }

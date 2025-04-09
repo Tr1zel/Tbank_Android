@@ -21,7 +21,7 @@ class LibraryAdapter(
 
     override fun onBindViewHolder(holder: LibraryViewHolder, position: Int) {
         val item = libraryItems[position]
-        holder.bind(item, onItemClick) // Передаем контекст в bind
+        holder.bind(item, onItemClick)
     }
 
     override fun getItemCount(): Int = libraryItems.size

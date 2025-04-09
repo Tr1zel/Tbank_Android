@@ -5,48 +5,36 @@
     android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/TitleBookText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BookimageView" />
 
     <ImageView
         android:id="@+id/BookimageView"
         android:layout_width="134dp"
         android:layout_height="139dp"
+        android:layout_marginTop="96dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/book"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="31dp"
-        tools:srcCompat="@drawable/book"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/item_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="Item Title"
+        android:layout_width="376dp"
+        android:layout_height="92dp"
+        android:layout_marginTop="36dp"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TitleBookText" />
+        app:layout_constraintTop_toBottomOf="@+id/BookimageView" />
 
     <Button
         android:id="@+id/BookSaveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="124dp"
+        android:layout_width="167dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="84dp"
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

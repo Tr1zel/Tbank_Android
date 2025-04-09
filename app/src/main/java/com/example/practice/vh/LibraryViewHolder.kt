@@ -4,6 +4,7 @@ import Book
 import Disk
 import Journal
 import LibraryObject
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
 import android.widget.ImageView
@@ -26,8 +27,11 @@ class LibraryViewHolder(binding: LibraryItemBinding): RecyclerView.ViewHolder(bi
         val resourceId = itemView.context.resources.getIdentifier(
             "book", "drawable", itemView.context.packageName
         )
-        image.setImageResource(resourceId)
-
+        if (resourceId != 0) {
+            image.setImageResource(resourceId)
+        } else {
+            image.setImageResource(R.drawable.ic_launcher_foreground) // или запасная картинка
+        }
         itemView.setOnClickListener {
             onItemClick(item)
 
