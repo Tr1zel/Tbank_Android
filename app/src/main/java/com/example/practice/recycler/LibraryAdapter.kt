@@ -1,30 +1,28 @@
 package com.example.practice
 import Library
 import LibraryObject
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.ListAdapter
 import com.example.practice.databinding.LibraryItemBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.example.practice.vh.LibraryViewHolder
 
 class LibraryAdapter(
-    private val items: MutableList<LibraryObject>,
-    val onItemClick: (LibraryObject) -> Unit ):
-    RecyclerView.Adapter<LibraryViewHolder>() {
-        val library = Library()
-
-
+    val libraryItems: List<LibraryObject>,
+    private val onItemClick: (LibraryObject) -> Unit,
+) : RecyclerView.Adapter<LibraryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LibraryViewHolder {
-        val binding = LibraryItemBinding.inflate(LayoutInflater.from(parent.context), parent,false)
-        return LibraryViewHolder(binding, onItemClick)
+        val binding = LibraryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return LibraryViewHolder(binding)
     }
-
-    override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: LibraryViewHolder, position: Int) {
-        holder.bind(items[position], onItemClick)
+        val item = libraryItems[position]
+        holder.bind(item, onItemClick)
     }
+
+    override fun getItemCount(): Int = libraryItems.size
 }
