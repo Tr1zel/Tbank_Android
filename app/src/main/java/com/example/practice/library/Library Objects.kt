@@ -1,17 +1,21 @@
+import java.io.Serializable
+import java.time.Month
+
 abstract class LibraryObject(
     val id: Int,
-    val title: String,
+    var title: String,
     var access: Boolean = true // По умолчанию доступен
-) {
+) : Serializable {
     abstract fun getShortDescription(): String
     abstract fun getLongDescription(): String
+    abstract fun showInfo(): String
 }
 
 class Book(
     id: Int,
     title: String,
     val pages: Int,
-    val author: String,
+    var author: String,
 ) : LibraryObject(id, title) {
     override fun getShortDescription(): String {
         return """
@@ -23,6 +27,12 @@ class Book(
         return """
                 Книга: $title ($pages стр.) автора: $author c Id: $id доступна: ${if (access) "Да" else "Нет"}
             """.trimIndent()
+    }
+
+    override fun showInfo(): String {
+        return "книга: $title (${pages} стр.) \n" +
+                "автора: ${author} с id: $id \n" +
+                "доступна: ${if (access) "Да" else "Нет"}"
     }
 }
 
@@ -44,6 +54,12 @@ class Journal(
                 Выпуск: $numIssue, Mесяц: $Month газеты $title с Id: $id доступен: ${if (access) "Да" else "Нет"}
             """.trimIndent()
     }
+
+    override fun showInfo(): String {
+        return "выпуск: $numIssue \n" +
+                "месяц: $numMonthIssue газеты $title с id: $id \n" +
+                "доступен: ${if (access) "Да" else "Нет"}"
+    }
 }
 
 class Disk(
@@ -62,21 +78,26 @@ class Disk(
                 $typeDisk $title доступен: ${if (access) "Да" else "Нет"}
             """.trimIndent()
     }
+
+    override fun showInfo(): String {
+        return "$typeDisk $title \n" +
+                "доступен: ${if (access) "Да" else "Нет"}"
+    }
 }
 
 enum class ReleaseMonthJournal(val numMonthIssue: Int, val russianName: String){
-        JANUARY(1, "Январь"),
-        FEBRUARY(2, "Февраль"),
-        MARCH(3, "Март"),
-        APRIL(4, "Апрель"),
-        MAY(5, "Май"),
-        JUNE(6, "Июнь"),
-        JULY(7, "Июль"),
-        AUGUST(8, "Август"),
-        SEPTEMBER(9, "Сентябрь"),
-        OCTOBER(10, "Октябрь"),
-        NOVEMBER(11, "Ноябрь"),
-        DECEMBER(12, "Декабрь");
+    JANUARY(1, "Январь"),
+    FEBRUARY(2, "Февраль"),
+    MARCH(3, "Март"),
+    APRIL(4, "Апрель"),
+    MAY(5, "Май"),
+    JUNE(6, "Июнь"),
+    JULY(7, "Июль"),
+    AUGUST(8, "Август"),
+    SEPTEMBER(9, "Сентябрь"),
+    OCTOBER(10, "Октябрь"),
+    NOVEMBER(11, "Ноябрь"),
+    DECEMBER(12, "Декабрь");
 
     companion object {
         fun fromNum(numMonth: Int): String? {
