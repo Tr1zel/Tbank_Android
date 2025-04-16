@@ -1,21 +1,17 @@
-import java.io.Serializable
-import java.time.Month
-
 abstract class LibraryObject(
     val id: Int,
-    var title: String,
+    val title: String,
     var access: Boolean = true // По умолчанию доступен
-) : Serializable {
+) {
     abstract fun getShortDescription(): String
     abstract fun getLongDescription(): String
-    abstract fun showInfo(): String
 }
 
 class Book(
     id: Int,
     title: String,
     val pages: Int,
-    var author: String,
+    val author: String,
 ) : LibraryObject(id, title) {
     override fun getShortDescription(): String {
         return """
@@ -27,12 +23,6 @@ class Book(
         return """
                 Книга: $title ($pages стр.) автора: $author c Id: $id доступна: ${if (access) "Да" else "Нет"}
             """.trimIndent()
-    }
-
-    override fun showInfo(): String {
-        return "книга: $title (${pages} стр.) \n" +
-                "автора: ${author} с id: $id \n" +
-                "доступна: ${if (access) "Да" else "Нет"}"
     }
 }
 
@@ -54,12 +44,6 @@ class Journal(
                 Выпуск: $numIssue, Mесяц: $Month газеты $title с Id: $id доступен: ${if (access) "Да" else "Нет"}
             """.trimIndent()
     }
-
-    override fun showInfo(): String {
-        return "выпуск: $numIssue \n" +
-                "месяц: $numMonthIssue газеты $title с id: $id \n" +
-                "доступен: ${if (access) "Да" else "Нет"}"
-    }
 }
 
 class Disk(
@@ -77,11 +61,6 @@ class Disk(
         return """
                 $typeDisk $title доступен: ${if (access) "Да" else "Нет"}
             """.trimIndent()
-    }
-
-    override fun showInfo(): String {
-        return "$typeDisk $title \n" +
-                "доступен: ${if (access) "Да" else "Нет"}"
     }
 }
 
