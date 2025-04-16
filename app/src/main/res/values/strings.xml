@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Practice</string>
-    <string name="second_activity">Second Activity</string>
+
+    <string-array name="types_array">
+        <item>Книга</item>
+        <item>Диск</item>
+        <item>Газета</item>
+    </string-array>
+
 </resources>

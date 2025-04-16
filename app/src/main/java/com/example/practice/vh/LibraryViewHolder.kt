@@ -12,9 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.practice.LibraryAdapter
 import com.example.practice.R
-import com.example.practice.SecondActivity
 import com.example.practice.databinding.LibraryItemBinding
-import com.example.practice.library.MainActivity
 
 class LibraryViewHolder(binding: LibraryItemBinding): RecyclerView.ViewHolder(binding.root) {
     private val title: TextView = binding.title
@@ -45,22 +43,6 @@ class LibraryViewHolder(binding: LibraryItemBinding): RecyclerView.ViewHolder(bi
         itemView.setOnClickListener {
             onItemClick(item)
 
-//            val intent = SecondActivity.createIntent(activityContext).apply {
-//                putExtra("info", item.showInfo())
-////                putExtra(SecondActivity.AUTHOR_TEXT, when (item){
-////                    is Book -> item.author //Нужно проверить, есть ли автор у journal/disk
-////                    else -> ""
-////                })
-////                when(item){
-////                    is Book -> item.title
-////                    is Journal -> item.title
-////                    is Disk -> item.title
-////                    else -> {""}
-////                }
-//                putExtra(SecondActivity.POSITION, LibraryAdapter(items, onItemClick, activityContext).libraryItems.indexOf(item) )   //.indexOf(item)) //Передаем позицию элемента
-//            }
-//
-//            (activityContext as? MainActivity)?.startForResult?.launch(intent)
 
         }
 

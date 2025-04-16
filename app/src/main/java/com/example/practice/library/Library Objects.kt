@@ -1,10 +1,11 @@
+import java.io.Serializable
 import java.time.Month
 
 abstract class LibraryObject(
     val id: Int,
     var title: String,
     var access: Boolean = true // По умолчанию доступен
-) {
+) : Serializable {
     abstract fun getShortDescription(): String
     abstract fun getLongDescription(): String
     abstract fun showInfo(): String
