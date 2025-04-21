@@ -58,7 +58,7 @@ class elem_detail_Fragments : Fragment() {
     }
 
     private fun showItemDetails() {
-        binding.groupDetails.visibility = View.VISIBLE
+        binding.groupAddForm.isVisible = false
         binding.groupAddForm.visibility = View.GONE
 
         binding.textViewDetail.text = item!!.showInfo()
