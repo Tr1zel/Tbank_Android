@@ -20,3 +20,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Practice"
+include(":app")
