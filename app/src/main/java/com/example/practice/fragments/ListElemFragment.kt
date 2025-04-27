@@ -8,12 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.practice.LibraryAdapter
 import com.example.practice.databinding.FragmentListElemBinding
+import com.example.practice.db.MyApplication
 import com.example.practice.library.LibraryRepository
 import com.example.practice.vh.LibraryViewModel
+import com.example.practice.vh.LibraryViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,7 +26,7 @@ class ListElemFragment : Fragment() {
 
     private var _binding: FragmentListElemBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: LibraryViewModel by viewModels()
+    private lateinit var viewModel: LibraryViewModel
 
     private lateinit var adapter: LibraryAdapter
     private var listener: OnLibraryItemClickListener? = null
@@ -49,6 +52,12 @@ class ListElemFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.layoutManager = layoutManager
+        val application = requireActivity().application as MyApplication
+        val baseDao = application.baseDao
+        val factory = LibraryViewModelFactory(baseDao)
+
+        // Создайте LibraryViewModel, используя ViewModelProvider
+        viewModel = ViewModelProvider(this, factory).get(LibraryViewModel::class.java)
 
         viewModel.loadLibraryItems { items ->
             adapter = LibraryAdapter(items) { item ->
