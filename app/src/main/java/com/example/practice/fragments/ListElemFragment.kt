@@ -1,6 +1,5 @@
 package com.example.practice.fragments
 
-import Library
 import LibraryObject
 import android.content.Context
 import android.os.Bundle
@@ -10,12 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.practice.LibraryAdapter
-import com.example.practice.R
 import com.example.practice.databinding.FragmentListElemBinding
-import com.example.practice.databinding.LibraryItemBinding
 import com.example.practice.library.LibraryRepository
 
-class List_elem_Fragment : Fragment() {
+class ListElemFragment : Fragment() {
 
     private var _binding: FragmentListElemBinding? = null
     private val binding get() = _binding!!
