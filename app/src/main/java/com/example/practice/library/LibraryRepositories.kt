@@ -5,7 +5,9 @@ import Disk
 import Journal
 import Library
 import LibraryObject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 object LibraryRepository {
     private val items = mutableListOf(
@@ -23,8 +25,11 @@ object LibraryRepository {
     )
     private var nextId = 1
 
-    fun getItems(): List<LibraryObject> = items
-
+    suspend fun getItems(): List<LibraryObject> = withContext(Dispatchers.IO)
+    {
+        delay(1000)
+        items
+    }
     suspend fun addItem(item: LibraryObject) {
         delay(1000)
         items.add(item)
