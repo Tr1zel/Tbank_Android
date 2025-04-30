@@ -1,4 +1,5 @@
 plugins {
+    id("com.google.devtools.ksp")
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 }
@@ -38,8 +39,15 @@ android {
     }
 }
 
-dependencies {
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
 
+dependencies {
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.com.google.devtools.ksp.gradle.plugin)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

@@ -2,19 +2,45 @@ import java.io.Serializable
 import java.time.Month
 
 abstract class LibraryObject(
-    val id: Int,
+    open val id: Int = 0,
     var title: String,
-    var access: Boolean = true // По умолчанию доступен
+    open var access: Boolean = true // По умолчанию доступен
 ) : Serializable {
     abstract fun getShortDescription(): String
     abstract fun getLongDescription(): String
     abstract fun showInfo(): String
+    fun copyWithId(item: LibraryObject, newId: Int): LibraryObject {
+        return when (item) {
+            is Book -> Book(
+                id = newId,
+                title = item.title,
+                access = item.access,
+                pages = item.pages,
+                author = item.author
+            )
+            is Journal -> Journal(
+                id = newId,
+                title = item.title,
+                access = item.access,
+                numIssue = item.numIssue,
+                numMonthIssue = item.numMonthIssue
+            )
+            is Disk -> Disk(
+                id = newId,
+                title = item.title,
+                access = item.access,
+                typeDisk = item.typeDisk
+            )
+            else -> throw IllegalArgumentException("Неизвестный тип объекта")
+        }
+    }
 }
 
 class Book(
-    id: Int,
+    override val id: Int = 0,
     title: String,
     val pages: Int,
+    override var access: Boolean = true,
     var author: String,
 ) : LibraryObject(id, title) {
     override fun getShortDescription(): String {
@@ -37,9 +63,10 @@ class Book(
 }
 
 class Journal(
-    id: Int,
+    override val id: Int = 0,
     title: String,
     val numIssue: Int,
+    override var access: Boolean = true,
     val numMonthIssue: Int,
 ) : LibraryObject(id, title) {
     override fun getShortDescription(): String {
@@ -63,9 +90,10 @@ class Journal(
 }
 
 class Disk(
-    id: Int,
+    override val id: Int = 0,
     title: String,
     val typeDisk: String,
+    override var access: Boolean = true // По умолчанию доступен
 ) : LibraryObject(id, title) {
     override fun getShortDescription(): String {
         return """

@@ -3,18 +3,14 @@ package com.example.practice.library
 import LibraryObject
 import android.content.res.Configuration
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.example.practice.databinding.ActivityMainBinding
 import com.example.practice.fragments.ListElemFragment
 import com.example.practice.R
+import com.example.practice.db.MainDb
 import com.example.practice.fragments.ElemDetailFragment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.random.Random
+
 
 class MainActivity : AppCompatActivity(), ListElemFragment.OnLibraryItemClickListener {
 
@@ -27,7 +23,6 @@ class MainActivity : AppCompatActivity(), ListElemFragment.OnLibraryItemClickLis
         setContentView(binding.root)
 
         isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-
         if (savedInstanceState == null)
         {
             supportFragmentManager.commit  {

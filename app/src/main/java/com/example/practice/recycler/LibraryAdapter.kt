@@ -1,9 +1,11 @@
 package com.example.practice
-import Library
+//import Library
 import LibraryObject
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.practice.databinding.LibraryItemBinding
 import androidx.recyclerview.widget.RecyclerView
@@ -19,10 +21,21 @@ class LibraryAdapter(
         return LibraryViewHolder(binding)
     }
 
+    override fun getItemCount(): Int = libraryItems.size
+
     override fun onBindViewHolder(holder: LibraryViewHolder, position: Int) {
         val item = libraryItems[position]
         holder.bind(item, onItemClick)
     }
 
-    override fun getItemCount(): Int = libraryItems.size
+    class LibraryDiffCallback : DiffUtil.ItemCallback<LibraryObject>() {
+        override fun areItemsTheSame(oldItem: LibraryObject, newItem: LibraryObject): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        @SuppressLint("DiffUtilEquals")
+        override fun areContentsTheSame(oldItem: LibraryObject, newItem: LibraryObject): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
