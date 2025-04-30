@@ -4,7 +4,6 @@ import Book
 import Disk
 import Journal
 import LibraryObject
-import ReleaseMonthJournal
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,17 +18,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.practice.R
 import com.example.practice.databinding.FragmentLibraryDetailBinding
-import com.example.practice.db.BaseDao
 import com.example.practice.db.MyApplication
 import com.example.practice.library.LibraryRepository
 import com.example.practice.vh.LibraryViewModel
 import com.example.practice.vh.LibraryViewModelFactory
+import com.facebook.shimmer.ShimmerFrameLayout
 import kotlinx.coroutines.launch
 
 class ElemDetailFragment : Fragment() {
 
     private var _binding: FragmentLibraryDetailBinding? = null
     private val binding get() = _binding!!
+    private lateinit var repository: LibraryRepository
+    lateinit var shimmerLayout: ShimmerFrameLayout
     private var item: LibraryObject? = null
 
     private lateinit var viewModel: LibraryViewModel
@@ -65,7 +66,7 @@ class ElemDetailFragment : Fragment() {
         val baseDao = application.baseDao
         val factory = LibraryViewModelFactory(baseDao)
 
-        // Создайте LibraryViewModel, используя ViewModelProvider
+
         viewModel = ViewModelProvider(this, factory).get(LibraryViewModel::class.java)
         if (item != null) {
             showItemDetails()
@@ -97,20 +98,17 @@ class ElemDetailFragment : Fragment() {
 
             val newItem = when (type) {
                 "Книга" -> Book(
-                    id = LibraryRepository.getNextId(),
                     title = name,
                     pages = 100,
                     author = "Автор"
                 )
 
                 "Диск" -> Disk(
-                    id = LibraryRepository.getNextId(),
                     title = name,
                     typeDisk = "CD"
                 )
 
                 else -> Journal(
-                    id = LibraryRepository.getNextId(),
                     title = name,
                     numMonthIssue = 1,
                     numIssue = 1
@@ -119,9 +117,17 @@ class ElemDetailFragment : Fragment() {
 
             viewLifecycleOwner.lifecycleScope.launch {
                 try {
-                    LibraryRepository.addItem(newItem, baseDao)
+                    val addedItem = repository.addItem(newItem, baseDao)
+                    Toast.makeText(
+                        requireContext(),
+                        "Успешное добавление ${addedItem.id}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
                     parentFragmentManager.setFragmentResult("item_added", Bundle())
                     requireActivity().supportFragmentManager.popBackStack()
+                    adapter.notifyDataSetChanged()
+                // Есть баг в альбомном режиме не меняется ListElemFragment при добавлении нового обьекта, не знаю как пофиксить, выше строка не помогает
                 } catch (e: Exception) {
                     Toast.makeText(
                         requireContext(),

@@ -3,32 +3,19 @@ package com.example.practice.library
 import Book
 import Disk
 import Journal
-import Library
 import LibraryObject
 import ReleaseMonthJournal
 import com.example.practice.db.BaseDao
+import com.example.practice.db.ItemType
 import com.example.practice.db.ItemsDB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
-object LibraryRepository {
-    private val items = mutableListOf(
-        Book(id = 11,"Гарри Поттер и узник Азкабана",620,"Джоан Роулинг"),
-        Book(id = 12, "Унесенные ветром", 270, "Маргарет Митчелл"),
-        Book(id = 13, "Зеленая миля", 1000, "Стивен Кинг"),
-        Book(id = 14, "Волшебство на котлин", 999, "Tbank"),
-        Journal(id = 21, "Известия Москвы", 12345, 1),
-        Journal(id = 22, "СпидИнфо", 666, 11),
-        Journal(id = 23, "Комсомольская правда",9999, 5),
-        Disk(id = 31, "Рэмбо 2001",   "CD"),
-        Disk(id = 32,  "Контер страйк 1.6",  "DVD"),
-        Disk(id = 33, "Сборник фильмов Гарри Поттер", "DVD"),
-        Disk(id = 34, "GTA 5", "DVD")
-    )
-    private var nextId = 1
+class LibraryRepository(private val libraryDao: BaseDao) {
 
-    suspend fun getItems(libraryDao: BaseDao): List<Any> {
+    suspend fun getItems():List<LibraryObject> {
+        delay(1000)
         return withContext(Dispatchers.IO) {
             libraryDao.getAll().map { dbItem ->
                 when (dbItem.type) {
@@ -57,38 +44,97 @@ object LibraryRepository {
             }
         }
     }
-    suspend fun addItem(item: LibraryObject, libraryDao: BaseDao) {
-        withContext(Dispatchers.IO) {
-            val newItemDB = when (item) {
-                is Book -> ItemsDB(
-                    id = getNextId(),
-                    title = item.title,
-                    pages = 100,
-                    author = item.author,
-                    type = "Book"
-                )
 
-                is Disk -> ItemsDB(
-                    id = getNextId(),
-                    title = item.title,
-                    typeDisk = item.typeDisk,
-                    type = "Disk"
-                )
+    fun LibraryObject.toDb(): ItemsDB = when (this) {
+        is Book -> ItemsDB(
+            id = this.id,
+            type = ItemType.BOOK.rawValue,
+            title = this.title,
+            access = this.access,
+            pages = this.pages,
+            author = this.author
+        )
 
-                is Journal -> ItemsDB(
-                    id = getNextId(),
-                    title = item.title,
-                    numMonthIssue = ReleaseMonthJournal.JANUARY.numMonthIssue,
-                    numIssue = item.numIssue,
-                    type = "Journal"
-                )
-                else -> throw IllegalArgumentException("Неизвестный тип объекта: ${item::class.java}")
-            }
-            libraryDao.insert(newItemDB)
-            delay(1000)
-            items.add(item)
-        }
+        is Journal -> ItemsDB(
+            id = this.id,
+            type = ItemType.JOURNAL.rawValue,
+            title = this.title,
+            access = this.access,
+            numIssue = this.numIssue,
+            numMonthIssue = this.numMonthIssue
+        )
+
+        is Disk -> ItemsDB(
+            id = this.id,
+            type = ItemType.DISK.rawValue,
+            title = this.title,
+            access = this.access,
+            typeDisk = this.typeDisk
+        )
+
+        else -> throw IllegalArgumentException("Неизвестный тип объекта: ${ItemsDB::class.java}")
     }
 
-    fun getNextId(): Int = nextId++
+    fun ItemsDB.toLibraryObject(): LibraryObject = when (type) {
+        "Book" -> Book(
+            id = this.id,
+            title = this.title,
+            pages = this.pages ?: 0,
+            author = this.author ?: ""
+        ).also { it.access = this.access }
+
+        "Journal" -> Journal(
+            id = this.id,
+            title = this.title,
+            numIssue = this.numIssue ?: 0,
+            numMonthIssue = this.numMonthIssue ?: 1
+        ).also { it.access = this.access }
+
+        "Disk" -> Disk(
+            id = this.id,
+            title = this.title,
+            typeDisk = this.typeDisk ?: "CD"
+        ).also { it.access = this.access }
+
+        else -> throw IllegalArgumentException("Неизвестный тип: $type")
+    }
+
+    fun LibraryObject.toDB(): ItemsDB = when (this) {
+        is Book -> ItemsDB(
+            id = this.id,
+            type = ItemType.BOOK.rawValue,
+            title = this.title,
+            access = this.access,
+            pages = this.pages,
+            author = this.author
+        )
+
+        is Journal -> ItemsDB(
+            id = this.id,
+            type = ItemType.JOURNAL.rawValue,
+            title = this.title,
+            access = this.access,
+            numIssue = this.numIssue,
+            numMonthIssue = this.numMonthIssue
+        )
+
+        is Disk -> ItemsDB(
+            id = this.id,
+            type = ItemType.DISK.rawValue,
+            title = this.title,
+            access = this.access,
+            typeDisk = this.typeDisk
+        )
+
+        else -> throw IllegalArgumentException("Неизвестный тип: $this")
+    }
+
+
+    suspend fun addItem(item: LibraryObject, dao: BaseDao): LibraryObject {
+        delay(1000)
+        val generateId = dao.insert(item.toDB())
+        val savedItem = item.   copyWithId(item, generateId.toInt())
+        return savedItem
+    }
+
 }

@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity(), ListElemFragment.OnLibraryItemClickLis
         setContentView(binding.root)
 
         isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        val db = MainDb.initDb(this)
         if (savedInstanceState == null)
         {
             supportFragmentManager.commit  {

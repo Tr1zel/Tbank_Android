@@ -9,7 +9,7 @@ data class ItemsDB(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @ColumnInfo(name = "type")
-    var type: String, // "Book", "Disk", "journal"
+    var type: String,
     @ColumnInfo(name = "access")
     var access: Boolean = true,
     @ColumnInfo(name = "title")
@@ -25,3 +25,16 @@ data class ItemsDB(
     @ColumnInfo(name = "typeDisk")
     val typeDisk: String? = null,
 )
+
+enum class ItemType(val rawValue: String) {
+    BOOK("Book"),
+    DISK("Disk"),
+    JOURNAL("Journal");
+
+    companion object {
+        fun fromString(value: String): ItemType? =
+            values().find { it.rawValue.equals(value, ignoreCase = true) }
+
+        fun toString(type: ItemType): String = type.rawValue
+    }}
+
